@@ -1,7 +1,7 @@
 const canvas = <HTMLCanvasElement>document.querySelector("#canvas");
 const context : CanvasRenderingContext2D = canvas.getContext("2d");
 
-class Point {
+interface Point {
     x: number;
     y: number;
 }
@@ -13,6 +13,26 @@ interface Player {
     draw: () => void
 }
 
+interface Projectile {
+    position: Point,
+    velocity: Point
+}
+
+function createProjectile(source: Point, destination: Point) : Projectile {
+
+    let velX = -(source.x - destination.x) / 100;
+    let velY = -(source.y - destination.y) / 100;
+    return {
+        position: {x: source.x, y: source.y},
+        velocity: {x: velX, y: velY}
+    }
+}
+
+function moveProjectile(p: Projectile) {
+    p.position.x += p.velocity.x;
+    p.position.y += p.velocity.y;
+}
+
 const player : Player = {
     position: {
         x: 20,
@@ -21,6 +41,7 @@ const player : Player = {
     size: 20,
     speed: 1,
     draw: function() {
+        context.fillStyle = "blue";
         context.fillRect(this.position.x, this.position.y, this.size, this.size)
     }
 }
@@ -29,7 +50,8 @@ const keyboardState = {
     up: false, // 87
     left: false, //65
     down: false, // 83
-    right: false // 68
+    right: false, // 68
+    fire: false // 32
 }
 
 window.addEventListener("keydown", (evt) => {
@@ -45,6 +67,9 @@ window.addEventListener("keydown", (evt) => {
             break;
         case 68:
             keyboardState.right = true;
+            break;
+        case 32:
+            keyboardState.fire = true;
             break;
     }
 });
@@ -62,6 +87,9 @@ window.addEventListener("keyup", (evt) => {
             break;
         case 68:
             keyboardState.right = false;
+            break;
+        case 32:
+            keyboardState.fire = false;
             break;
     }
 });
@@ -103,13 +131,26 @@ function movePlayer() {
     }
 }
 
+const projectiles : Array<Projectile> = [];
+
+function drawProjectile(p: Projectile) {
+    context.fillStyle = "coral";
+    context.fillRect(p.position.x, p.position.y, 5, 5);
+}
+
 function main() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     movePlayer();
+    if(keyboardState.fire) {
+        let p = createProjectile(player.position, mouseState);
+        projectiles.push(p);
+    }
 
     player.draw();
     drawLaserSight();
+    projectiles.forEach((p) => moveProjectile(p));
+    projectiles.forEach((p) => drawProjectile(p));
 
     requestAnimationFrame(main);
 }
