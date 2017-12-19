@@ -19,9 +19,13 @@ interface Projectile {
 }
 
 function createProjectile(source: Point, destination: Point) : Projectile {
-
-    let velX = -(source.x - destination.x) / 100;
-    let velY = -(source.y - destination.y) / 100;
+    let speed = 1; // prop on prjectile
+    let dx = destination.x - source.x;
+    let dy = destination.y - source.y;
+    let distance = Math.sqrt(dx * dx + dy * dy);
+    let moves = distance / speed;
+    let velX = dx / moves;
+    let velY = dy / moves;
     return {
         position: {x: source.x, y: source.y},
         velocity: {x: velX, y: velY}
@@ -32,6 +36,7 @@ function moveProjectile(p: Projectile) {
     p.position.x += p.velocity.x;
     p.position.y += p.velocity.y;
 }
+
 
 const player : Player = {
     position: {
