@@ -10,7 +10,9 @@ interface Player {
     position: Point;
     size: number;
     speed: number
-    draw: () => void
+    reload: number // time in ms
+    draw: () => void,
+    canFire: () => boolean
 }
 
 interface Projectile {
@@ -19,7 +21,7 @@ interface Projectile {
 }
 
 function createProjectile(source: Point, destination: Point) : Projectile {
-    let speed = 1; // prop on prjectile
+    let speed = 10; // prop on prjectile
     let dx = destination.x - source.x;
     let dy = destination.y - source.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
@@ -45,9 +47,13 @@ const player : Player = {
     },
     size: 20,
     speed: 1,
+    reload: 500,
     draw: function() {
         context.fillStyle = "blue";
         context.fillRect(this.position.x, this.position.y, this.size, this.size)
+    },
+    canFire: function() {
+        return this.reload <= 0;
     }
 }
 
@@ -150,12 +156,20 @@ function isProjectileOutOfBounds(p: Projectile) : boolean {
            p.position.y > canvas.height;
 }
 
+let timeOfLastFrame = Date.now();
+
 function main() {
+    let timeOfCurrentFrame = Date.now();
+    let deltaTime = timeOfCurrentFrame - timeOfLastFrame;
+    timeOfLastFrame = timeOfCurrentFrame;
+
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     movePlayer();
-    if(keyboardState.fire) {
+    player.reload -= deltaTime;
+    if(keyboardState.fire && player.canFire()) {
         let p = createProjectile(player.position, mouseState);
+        player.reload = 500;
         projectiles.push(p);
     }
 
