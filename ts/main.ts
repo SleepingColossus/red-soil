@@ -136,11 +136,18 @@ function movePlayer() {
     }
 }
 
-const projectiles : Array<Projectile> = [];
+let projectiles : Array<Projectile> = [];
 
 function drawProjectile(p: Projectile) {
     context.fillStyle = "coral";
     context.fillRect(p.position.x, p.position.y, 5, 5);
+}
+
+function isProjectileOutOfBounds(p: Projectile) : boolean {
+    return p.position.x < 0 ||
+           p.position.x > canvas.width ||
+           p.position.y < 0 ||
+           p.position.y > canvas.height;
 }
 
 function main() {
@@ -156,6 +163,7 @@ function main() {
     drawLaserSight();
     projectiles.forEach((p) => moveProjectile(p));
     projectiles.forEach((p) => drawProjectile(p));
+    projectiles = projectiles.filter((p) => !isProjectileOutOfBounds(p))
 
     requestAnimationFrame(main);
 }
