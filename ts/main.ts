@@ -1,3 +1,86 @@
+namespace Player {
+    export interface Player {
+        position: Point;
+        size: number;
+        speed: number
+        reload: number // time in ms
+    }
+
+    export function drawLaserSight(p: Player) {
+        context.beginPath();
+        context.moveTo(p.position.x + p.size / 2, p.position.y + p.size / 2);
+        context.lineTo(mouseState.x, mouseState.y);
+        context.strokeStyle = "red";
+        context.stroke();
+        context.closePath();
+    }
+
+    export function move(p: Player) {
+        if(keyboardState.up) {
+            p.position.y -= p.speed;
+        }
+
+        if(keyboardState.down) {
+            p.position.y += p.speed;
+        }
+
+        if(keyboardState.left) {
+            p.position.x -= p.speed;
+        }
+
+        if(keyboardState.right) {
+            p.position.x += p.speed;
+        }
+    }
+
+    export function draw(p: Player) {
+        context.fillStyle = "blue";
+        context.fillRect(p.position.x, p.position.y, p.size, p.size);
+    }
+
+    export function canFire(p: Player) {
+        return p.reload <= 0;
+    }
+}
+
+namespace Projectile {
+    export interface Projectile {
+        position: Point,
+        velocity: Point
+    }
+
+    export function create(source: Point, destination: Point) : Projectile {
+        let speed = 10; // prop on prjectile
+        let dx = destination.x - source.x;
+        let dy = destination.y - source.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        let moves = distance / speed;
+        let velX = dx / moves;
+        let velY = dy / moves;
+        return {
+            position: {x: source.x, y: source.y},
+            velocity: {x: velX, y: velY}
+        }
+    }
+
+    export function move(p: Projectile) {
+        p.position.x += p.velocity.x;
+        p.position.y += p.velocity.y;
+    }
+
+    export function draw(p: Projectile) {
+        context.fillStyle = "coral";
+        context.fillRect(p.position.x, p.position.y, 5, 5);
+    }
+
+    export function isOutOfBounds(p: Projectile) : boolean {
+        return p.position.x < 0 ||
+               p.position.x > canvas.width ||
+               p.position.y < 0 ||
+               p.position.y > canvas.height;
+    }
+}
+
 const canvas = <HTMLCanvasElement>document.querySelector("#canvas");
 const context : CanvasRenderingContext2D = canvas.getContext("2d");
 
@@ -6,55 +89,14 @@ interface Point {
     y: number;
 }
 
-interface Player {
-    position: Point;
-    size: number;
-    speed: number
-    reload: number // time in ms
-    draw: () => void,
-    canFire: () => boolean
-}
-
-interface Projectile {
-    position: Point,
-    velocity: Point
-}
-
-function createProjectile(source: Point, destination: Point) : Projectile {
-    let speed = 10; // prop on prjectile
-    let dx = destination.x - source.x;
-    let dy = destination.y - source.y;
-    let distance = Math.sqrt(dx * dx + dy * dy);
-    let moves = distance / speed;
-    let velX = dx / moves;
-    let velY = dy / moves;
-    return {
-        position: {x: source.x, y: source.y},
-        velocity: {x: velX, y: velY}
-    }
-}
-
-function moveProjectile(p: Projectile) {
-    p.position.x += p.velocity.x;
-    p.position.y += p.velocity.y;
-}
-
-
-const player : Player = {
+const player : Player.Player = {
     position: {
         x: 20,
         y: 20
     },
     size: 20,
     speed: 1,
-    reload: 500,
-    draw: function() {
-        context.fillStyle = "blue";
-        context.fillRect(this.position.x, this.position.y, this.size, this.size)
-    },
-    canFire: function() {
-        return this.reload <= 0;
-    }
+    reload: 500
 }
 
 const keyboardState = {
@@ -115,46 +157,7 @@ canvas.addEventListener("mousemove", (evt) => {
     mouseState.y = evt.pageY;
 });
 
-function drawLaserSight() {
-    context.beginPath();
-    context.moveTo(player.position.x + player.size / 2, player.position.y + player.size / 2);
-    context.lineTo(mouseState.x, mouseState.y);
-    context.strokeStyle = "red";
-    context.stroke();
-    context.closePath();
-}
-
-function movePlayer() {
-    if(keyboardState.up) {
-        player.position.y -= player.speed;
-    }
-
-    if(keyboardState.down) {
-        player.position.y += player.speed;
-    }
-
-    if(keyboardState.left) {
-        player.position.x -= player.speed;
-    }
-
-    if(keyboardState.right) {
-        player.position.x += player.speed;
-    }
-}
-
-let projectiles : Array<Projectile> = [];
-
-function drawProjectile(p: Projectile) {
-    context.fillStyle = "coral";
-    context.fillRect(p.position.x, p.position.y, 5, 5);
-}
-
-function isProjectileOutOfBounds(p: Projectile) : boolean {
-    return p.position.x < 0 ||
-           p.position.x > canvas.width ||
-           p.position.y < 0 ||
-           p.position.y > canvas.height;
-}
+let projectiles : Array<Projectile.Projectile> = [];
 
 let timeOfLastFrame = Date.now();
 
@@ -165,19 +168,19 @@ function main() {
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    movePlayer();
+    Player.move(player);
     player.reload -= deltaTime;
-    if(keyboardState.fire && player.canFire()) {
-        let p = createProjectile(player.position, mouseState);
+    if(keyboardState.fire && Player.canFire(player)) {
+        let p = Projectile.create(player.position, mouseState);
         player.reload = 500;
         projectiles.push(p);
     }
 
-    player.draw();
-    drawLaserSight();
-    projectiles.forEach((p) => moveProjectile(p));
-    projectiles.forEach((p) => drawProjectile(p));
-    projectiles = projectiles.filter((p) => !isProjectileOutOfBounds(p))
+    Player.draw(player);
+    Player.drawLaserSight(player);
+    projectiles.forEach((p) => Projectile.move(p));
+    projectiles.forEach((p) => Projectile.draw(p));
+    projectiles = projectiles.filter((p) => !Projectile.isOutOfBounds(p))
 
     requestAnimationFrame(main);
 }
