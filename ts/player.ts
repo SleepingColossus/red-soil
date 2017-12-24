@@ -1,8 +1,5 @@
 namespace Player {
-    export interface Player {
-        position: Core.Point;
-        size: number;
-        speed: number
+    export interface Player extends Core.Body2d {
         reload: number // time in ms
     }
 

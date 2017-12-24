@@ -1,7 +1,7 @@
 namespace Projectile {
-    export interface Projectile {
-        position: Core.Point,
+    export interface Projectile extends Core.Body2d {
         velocity: Core.Point
+        destroyed: boolean
     }
 
     export function create(source: Core.Point, destination: Core.Point) : Projectile {
@@ -14,7 +14,10 @@ namespace Projectile {
         let velY = dy / moves;
         return {
             position: {x: source.x, y: source.y},
-            velocity: {x: velX, y: velY}
+            speed: speed,
+            size: 5,
+            velocity: {x: velX, y: velY},
+            destroyed: false
         }
     }
 

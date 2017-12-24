@@ -3,6 +3,7 @@
 /// <reference path="projectile.ts" />
 /// <reference path="inputManager.ts" />
 /// <reference path="clock.ts" />
+/// <reference path="enemy.ts" />
 /// <reference path="gameState.ts" />
 /// <reference path="renderer.ts" />
 

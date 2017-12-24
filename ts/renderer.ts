@@ -29,6 +29,7 @@ namespace Renderer {
         drawPlayer(r, gameState.player);
         drawLaserSight(r, gameState.player);
         gameState.projectiles.forEach((p) => drawProjectile(r, p));
+        gameState.enemies.forEach((e) => drawEnemy(r, e));
     }
 
     // private
@@ -52,6 +53,11 @@ namespace Renderer {
 
     function drawProjectile(r: Renderer, p: Projectile.Projectile) {
         r.context.fillStyle = "coral";
-        r.context.fillRect(p.position.x, p.position.y, 5, 5);
+        r.context.fillRect(p.position.x, p.position.y, p.size, p.size);
+    }
+
+    function drawEnemy(r: Renderer, e: Enemy.Enemy) {
+        r.context.fillStyle = "green";
+        r.context.fillRect(e.position.x, e.position.y, e.size, e.size);
     }
 }

@@ -1,12 +1,14 @@
 namespace GameState {
     export interface GameState {
+        clock: Clock.Clock;
         player: Player.Player;
         projectiles: Array<Projectile.Projectile>;
-        clock: Clock.Clock;
+        enemies: Array<Enemy.Enemy>;
     }
 
     export function create() : GameState {
         return {
+            clock: Clock.create(),
             player: {
                 position: {
                     x: 250,
@@ -17,7 +19,9 @@ namespace GameState {
                 reload: 500
             },
             projectiles: [],
-            clock: Clock.create()
+            enemies: [
+                Enemy.create(20, 20)
+            ]
         }
     }
 
@@ -32,9 +36,24 @@ namespace GameState {
             gameState.projectiles.push(p);
         }
 
-        gameState.projectiles.forEach((p) => Projectile.move(p));
         gameState.projectiles =
-            gameState.projectiles.filter((p) => !Projectile.isOutOfBounds(p, xBoundary, yBoundary));
-    }
+            gameState.projectiles.filter((p) =>
+                !Projectile.isOutOfBounds(p, xBoundary, yBoundary)
+                && !p.destroyed
+            );
+        gameState.projectiles.forEach((p) => Projectile.move(p));
 
+        gameState.projectiles.forEach((p) => {
+            gameState.enemies.forEach((e) => {
+                if(Core.isColliding(p.position, e))
+                {
+                    p.destroyed = true;
+                    Enemy.damage(e, 1);
+                }
+            });
+        });
+
+        gameState.enemies = gameState.enemies.filter((e) => Enemy.isAlive(e));
+        gameState.enemies.forEach((e) => Enemy.move(e, gameState.player))
+    }
 }
