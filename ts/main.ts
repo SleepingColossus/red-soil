@@ -9,26 +9,26 @@ namespace Player {
     export function drawLaserSight(p: Player) {
         context.beginPath();
         context.moveTo(p.position.x + p.size / 2, p.position.y + p.size / 2);
-        context.lineTo(mouseState.x, mouseState.y);
+        context.lineTo(InputManager.mouseState.x, InputManager.mouseState.y);
         context.strokeStyle = "red";
         context.stroke();
         context.closePath();
     }
 
     export function move(p: Player) {
-        if(keyboardState.up) {
+        if(InputManager.keyboardState[InputManager.controls.up]) {
             p.position.y -= p.speed;
         }
 
-        if(keyboardState.down) {
+        if(InputManager.keyboardState[InputManager.controls.down]) {
             p.position.y += p.speed;
         }
 
-        if(keyboardState.left) {
+        if(InputManager.keyboardState[InputManager.controls.left]) {
             p.position.x -= p.speed;
         }
 
-        if(keyboardState.right) {
+        if(InputManager.keyboardState[InputManager.controls.right]) {
             p.position.x += p.speed;
         }
     }
@@ -81,6 +81,29 @@ namespace Projectile {
     }
 }
 
+namespace InputManager {
+    export const mouseState = {
+        x: 0,
+        y: 0
+    }
+
+    export function updateMouseState(x: number, y: number) {
+        mouseState.x = x;
+        mouseState.y = y;
+    }
+
+    export const controls = {
+        up:  87,
+        left: 65,
+        down: 83,
+        right: 68,
+        fire: 32
+    }
+
+    // dictionary of keycodes and booleans
+    export const keyboardState : { [id: number] : boolean; } = {}
+}
+
 const canvas = <HTMLCanvasElement>document.querySelector("#canvas");
 const context : CanvasRenderingContext2D = canvas.getContext("2d");
 
@@ -99,62 +122,16 @@ const player : Player.Player = {
     reload: 500
 }
 
-const keyboardState = {
-    up: false, // 87
-    left: false, //65
-    down: false, // 83
-    right: false, // 68
-    fire: false // 32
-}
-
 window.addEventListener("keydown", (evt) => {
-    switch(evt.keyCode) {
-        case 87:
-            keyboardState.up = true;
-            break;
-        case 65:
-            keyboardState.left = true;
-            break;
-        case 83:
-            keyboardState.down = true;
-            break;
-        case 68:
-            keyboardState.right = true;
-            break;
-        case 32:
-            keyboardState.fire = true;
-            break;
-    }
+    InputManager.keyboardState[evt.keyCode] = true;
 });
 
 window.addEventListener("keyup", (evt) => {
-    switch(evt.keyCode) {
-        case 87:
-            keyboardState.up = false;
-            break;
-        case 65:
-            keyboardState.left = false;
-            break;
-        case 83:
-            keyboardState.down = false;
-            break;
-        case 68:
-            keyboardState.right = false;
-            break;
-        case 32:
-            keyboardState.fire = false;
-            break;
-    }
+    InputManager.keyboardState[evt.keyCode] = false;
 });
 
-const mouseState = {
-    x: 0,
-    y: 0
-}
-
 canvas.addEventListener("mousemove", (evt) => {
-    mouseState.x = evt.pageX;
-    mouseState.y = evt.pageY;
+    InputManager.updateMouseState(evt.pageX, evt.pageY);
 });
 
 let projectiles : Array<Projectile.Projectile> = [];
@@ -170,8 +147,8 @@ function main() {
 
     Player.move(player);
     player.reload -= deltaTime;
-    if(keyboardState.fire && Player.canFire(player)) {
-        let p = Projectile.create(player.position, mouseState);
+    if(InputManager.keyboardState[InputManager.controls.fire] && Player.canFire(player)) {
+        let p = Projectile.create(player.position, InputManager.mouseState);
         player.reload = 500;
         projectiles.push(p);
     }
