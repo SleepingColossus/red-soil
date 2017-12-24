@@ -1,6 +1,7 @@
 namespace Enemy {
     export interface Enemy extends Core.Body2d {
-        health: number;
+        maxHealth: number;
+        currentHealth: number;
     }
 
     export function create(x: number, y: number): Enemy {
@@ -11,7 +12,8 @@ namespace Enemy {
             },
             size: 30,
             speed: 0.2,
-            health: 3
+            maxHealth: 3,
+            currentHealth: 3
         }
     }
 
@@ -30,10 +32,10 @@ namespace Enemy {
     }
 
     export function isAlive(e: Enemy): boolean {
-        return e.health > 0;
+        return e.currentHealth > 0;
     }
 
     export function damage(e: Enemy, amount: number) {
-        e.health -= amount;
+        e.currentHealth -= amount;
     }
 }
