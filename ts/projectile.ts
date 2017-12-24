@@ -23,15 +23,10 @@ namespace Projectile {
         p.position.y += p.velocity.y;
     }
 
-    export function draw(p: Projectile) {
-        context.fillStyle = "coral";
-        context.fillRect(p.position.x, p.position.y, 5, 5);
-    }
-
-    export function isOutOfBounds(p: Projectile) : boolean {
+    export function isOutOfBounds(p: Projectile, xBoundary: number, yBoundary: number) : boolean {
         return p.position.x < 0 ||
-               p.position.x > canvas.width ||
+               p.position.x > xBoundary ||
                p.position.y < 0 ||
-               p.position.y > canvas.height;
+               p.position.y > yBoundary;
     }
 }
