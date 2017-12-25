@@ -16,4 +16,27 @@ namespace Core {
             && point.y >= body.position.y
             && point.y <= body.position.y + body.size;
     }
+
+    export namespace Directions {
+        export const Up = "up";
+        export const UpRight = "upright";
+        export const Right = "right";
+        export const DownRight = "downright";
+        export const Down = "down";
+        export const DownLeft = "downleft";
+        export const Left = "left";
+        export const UpLeft = "upleft";
+    }
+
+    // used to get sprite for given direction
+    export const directionIndex = {
+        [Directions.Up] : 0,
+        [Directions.UpRight] : 1,
+        [Directions.Right] : 2,
+        [Directions.DownRight] : 3,
+        [Directions.Down] : 4,
+        [Directions.DownLeft] : 5,
+        [Directions.Left] : 6,
+        [Directions.UpLeft] : 7
+    }
 }

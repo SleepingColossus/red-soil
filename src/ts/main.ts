@@ -6,9 +6,10 @@
 /// <reference path="enemy.ts" />
 /// <reference path="spawner.ts" />
 /// <reference path="gameState.ts" />
+/// <reference path="spriteSheet.ts" />
 /// <reference path="renderer.ts" />
 
-const renderer = Renderer.create("#canvas");
+const renderer = Renderer.create("#canvas", "#spritesheet");
 const gameState = GameState.create(renderer.canvas.width, renderer.canvas.height);
 
 window.addEventListener("keydown", (evt) => {
