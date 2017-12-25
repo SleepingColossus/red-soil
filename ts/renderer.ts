@@ -59,7 +59,7 @@ namespace Renderer {
     }
 
     function drawEnemy(r: Renderer, e: Enemy.Enemy) {
-        r.context.fillStyle = "green";
+        r.context.fillStyle = "darkseagreen";
         r.context.fillRect(e.position.x, e.position.y, e.size, e.size);
     }
 
@@ -76,7 +76,7 @@ namespace Renderer {
         r.context.beginPath();
         r.context.moveTo(e.position.x, e.position.y - barOffset)
         r.context.lineTo(e.position.x + healthyPortion, e.position.y - barOffset);
-        r.context.strokeStyle = "green";
+        r.context.strokeStyle = "lawngreen";
         r.context.stroke();
         r.context.closePath();
 
