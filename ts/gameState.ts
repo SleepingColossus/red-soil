@@ -4,6 +4,7 @@ namespace GameState {
         player: Player.Player;
         projectiles: Array<Projectile.Projectile>;
         enemies: Array<Enemy.Enemy>;
+        spawner: Spawner.Spawner;
     }
 
     export function create() : GameState {
@@ -21,12 +22,14 @@ namespace GameState {
             projectiles: [],
             enemies: [
                 Enemy.create(20, 20)
-            ]
+            ],
+            spawner: Spawner.create()
         }
     }
 
     export function update(gameState: GameState, xBoundary: number, yBoundary: number): void {
         Clock.update(gameState.clock);
+        Spawner.update(gameState.spawner, gameState.clock.deltaTime);
         Player.move(gameState.player);
 
         gameState.player.reload -= gameState.clock.deltaTime;
@@ -55,5 +58,9 @@ namespace GameState {
 
         gameState.enemies = gameState.enemies.filter((e) => Enemy.isAlive(e));
         gameState.enemies.forEach((e) => Enemy.move(e, gameState.player))
+        if(Spawner.ready(gameState.spawner)) {
+            Spawner.reset(gameState.spawner);
+            gameState.enemies.push(Enemy.create(20, 20));
+        }
     }
 }
