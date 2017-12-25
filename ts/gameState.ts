@@ -7,22 +7,20 @@ namespace GameState {
         spawner: Spawner.Spawner;
     }
 
-    export function create() : GameState {
+    export function create(xBoundary: number, yBoundary: number) : GameState {
         return {
             clock: Clock.create(),
             player: {
                 position: {
-                    x: 250,
-                    y: 250
+                    x: xBoundary / 2,
+                    y: yBoundary / 2
                 },
                 size: 20,
                 speed: 1,
                 reload: 500
             },
             projectiles: [],
-            enemies: [
-                Enemy.create(20, 20)
-            ],
+            enemies: [],
             spawner: Spawner.create()
         }
     }
@@ -60,7 +58,7 @@ namespace GameState {
         gameState.enemies.forEach((e) => Enemy.move(e, gameState.player))
         if(Spawner.ready(gameState.spawner)) {
             Spawner.reset(gameState.spawner);
-            gameState.enemies.push(Enemy.create(20, 20));
+            gameState.enemies.push(Enemy.create(xBoundary, yBoundary));
         }
     }
 }

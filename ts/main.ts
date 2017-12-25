@@ -9,7 +9,7 @@
 /// <reference path="renderer.ts" />
 
 const renderer = Renderer.create("#canvas");
-const gameState = GameState.create();
+const gameState = GameState.create(renderer.canvas.width, renderer.canvas.height);
 
 window.addEventListener("keydown", (evt) => {
     InputManager.keyboardState[evt.keyCode] = true;

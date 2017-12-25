@@ -4,12 +4,28 @@ namespace Enemy {
         currentHealth: number;
     }
 
-    export function create(x: number, y: number): Enemy {
+    export function create(xBoundary: number, yBoundary: number): Enemy {
+        function randomInRange(min: number, max: number): number {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        const spawnOffset = 30;
+        // select random edge
+        const edge = randomInRange(1, 4);
+
+        let position : Core.Point;
+
+        if(edge == 1) { // top edge
+            position = { x: randomInRange(0, xBoundary), y: -spawnOffset };
+        } else if(edge == 2) { // bottom edge
+            position = { x: randomInRange(0, xBoundary), y: yBoundary };
+        } else if (edge == 3) { // left edge
+            position = { x: -spawnOffset, y: randomInRange(0, yBoundary) };
+        } else { // right edge
+            position = { x: xBoundary , y: randomInRange(0, yBoundary) };
+        }
+
         return {
-            position: {
-                x: x,
-                y: y
-            },
+            position: position,
             size: 30,
             speed: 0.2,
             maxHealth: 3,
