@@ -1,28 +1,42 @@
 namespace Enemy {
+
+    export enum EnemyType { Ant, Frog, Bug }
+
+    function randomEnemyType(): EnemyType {
+        let random = Core.randomInRange(1, 3);
+
+        if(random == 1) {
+            return EnemyType.Ant;
+        } else if(random == 2) {
+            return EnemyType.Frog;
+        } else {
+            return EnemyType.Bug;
+        }
+    }
+
     export interface Enemy extends Core.Body2d {
         maxHealth: number;
         currentHealth: number;
         velocity: Core.Point;
+        type: EnemyType;
     }
 
     export function create(xBoundary: number, yBoundary: number): Enemy {
-        function randomInRange(min: number, max: number): number {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
+
         const spawnOffset = 30;
         // select random edge
-        const edge = randomInRange(1, 4);
+        const edge = Core.randomInRange(1, 4);
 
         let position : Core.Point;
 
         if(edge == 1) { // top edge
-            position = { x: randomInRange(0, xBoundary), y: -spawnOffset };
+            position = { x: Core.randomInRange(0, xBoundary), y: -spawnOffset };
         } else if(edge == 2) { // bottom edge
-            position = { x: randomInRange(0, xBoundary), y: yBoundary };
+            position = { x: Core.randomInRange(0, xBoundary), y: yBoundary };
         } else if (edge == 3) { // left edge
-            position = { x: -spawnOffset, y: randomInRange(0, yBoundary) };
+            position = { x: -spawnOffset, y: Core.randomInRange(0, yBoundary) };
         } else { // right edge
-            position = { x: xBoundary , y: randomInRange(0, yBoundary) };
+            position = { x: xBoundary , y: Core.randomInRange(0, yBoundary) };
         }
 
         return {
@@ -31,7 +45,8 @@ namespace Enemy {
             speed: 0.2,
             maxHealth: 3,
             currentHealth: 3,
-            velocity: {x: 0, y: 0}
+            velocity: {x: 0, y: 0},
+            type: randomEnemyType()
         }
     }
 

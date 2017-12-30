@@ -93,7 +93,16 @@ namespace Renderer {
 
     function drawEnemy(r: Renderer, deltaTime: number, e: Enemy.Enemy) {
         const spriteIndex = Enemy.getDirection(e);
-        drawAnimatedSprite(r, SpriteSheet.SpriteIds.Bug, spriteIndex, deltaTime, e.position);
+        let spriteType: string;
+        if(e.type == Enemy.EnemyType.Ant) {
+            spriteType = SpriteSheet.SpriteIds.Ant;
+        } else if(e.type == Enemy.EnemyType.Frog) {
+            spriteType = SpriteSheet.SpriteIds.Frog;
+        } else {
+            spriteType = SpriteSheet.SpriteIds.Bug;
+        }
+
+        drawAnimatedSprite(r, spriteType, spriteIndex, deltaTime, e.position);
     }
 
     function drawHealthBar(r: Renderer, e: Enemy.Enemy) {

@@ -39,4 +39,8 @@ namespace Core {
         [Directions.Left] : 6,
         [Directions.UpLeft] : 7
     }
+
+    export function randomInRange(min: number, max: number): number {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 }

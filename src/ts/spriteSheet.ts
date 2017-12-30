@@ -5,6 +5,8 @@ namespace SpriteSheet {
         export const Projectile = "projectile";
         export const Grass = "grass";
 
+        export const Ant = "ant";
+        export const Frog = "frog";
         export const Bug = "bug";
     }
 
@@ -38,7 +40,7 @@ namespace SpriteSheet {
                 [SpriteIds.Grass] : { srcX: col(1), srcY: row(0), w: 30, h: 30 }
             },
             animatedSprites: {
-                [SpriteIds.Bug]: {
+                [SpriteIds.Ant]: {
                     numberOframes: 2,
                     currentFrame: 0,
                     animationInterval: 500,
@@ -60,6 +62,54 @@ namespace SpriteSheet {
                         { srcX: col(1), srcY: row(5), w: 30, h: 30 },
                         { srcX: col(2), srcY: row(5), w: 30, h: 30 },
                         { srcX: col(3), srcY: row(5), w: 30, h: 30 },
+                    ]
+                },
+                [SpriteIds.Frog]: {
+                    numberOframes: 2,
+                    currentFrame: 0,
+                    animationInterval: 500,
+                    animationCounter: 0,
+                    sprites: [
+                        { srcX: col(0), srcY: row(6), w: 30, h: 30 },
+                        { srcX: col(1), srcY: row(6), w: 30, h: 30 },
+                        { srcX: col(2), srcY: row(6), w: 30, h: 30 },
+                        { srcX: col(3), srcY: row(6), w: 30, h: 30 },
+                        { srcX: col(0), srcY: row(7), w: 30, h: 30 },
+                        { srcX: col(1), srcY: row(7), w: 30, h: 30 },
+                        { srcX: col(2), srcY: row(7), w: 30, h: 30 },
+                        { srcX: col(3), srcY: row(7), w: 30, h: 30 },
+                        { srcX: col(0), srcY: row(8), w: 30, h: 30 },
+                        { srcX: col(1), srcY: row(8), w: 30, h: 30 },
+                        { srcX: col(2), srcY: row(8), w: 30, h: 30 },
+                        { srcX: col(3), srcY: row(8), w: 30, h: 30 },
+                        { srcX: col(0), srcY: row(9), w: 30, h: 30 },
+                        { srcX: col(1), srcY: row(9), w: 30, h: 30 },
+                        { srcX: col(2), srcY: row(9), w: 30, h: 30 },
+                        { srcX: col(3), srcY: row(9), w: 30, h: 30 },
+                    ]
+                },
+                [SpriteIds.Bug]: {
+                    numberOframes: 2,
+                    currentFrame: 0,
+                    animationInterval: 500,
+                    animationCounter: 0,
+                    sprites: [
+                        { srcX: col(0), srcY: row(10), w: 30, h: 30 },
+                        { srcX: col(1), srcY: row(10), w: 30, h: 30 },
+                        { srcX: col(2), srcY: row(10), w: 30, h: 30 },
+                        { srcX: col(3), srcY: row(10), w: 30, h: 30 },
+                        { srcX: col(0), srcY: row(11), w: 30, h: 30 },
+                        { srcX: col(1), srcY: row(11), w: 30, h: 30 },
+                        { srcX: col(2), srcY: row(11), w: 30, h: 30 },
+                        { srcX: col(3), srcY: row(11), w: 30, h: 30 },
+                        { srcX: col(0), srcY: row(12), w: 30, h: 30 },
+                        { srcX: col(1), srcY: row(12), w: 30, h: 30 },
+                        { srcX: col(2), srcY: row(12), w: 30, h: 30 },
+                        { srcX: col(3), srcY: row(12), w: 30, h: 30 },
+                        { srcX: col(0), srcY: row(13), w: 30, h: 30 },
+                        { srcX: col(1), srcY: row(13), w: 30, h: 30 },
+                        { srcX: col(2), srcY: row(13), w: 30, h: 30 },
+                        { srcX: col(3), srcY: row(13), w: 30, h: 30 },
                     ]
                 }
             }
